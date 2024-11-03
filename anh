@@ -3,31 +3,36 @@
 #include <stdlib.h>
 
 int main() {
-    char in1[1000][100], in2[1000][100];
+    char in[1000][1000];
     int a, umur[1000];
     scanf("%d", &a);
     getchar();
     
     for (int i = 0; i < a; i++) {
-        scanf("%s %s %d", in1[i], in2[i], &umur[i]);
+        fgets(in[i], 1000, stdin);
+        in[i][strcspn(in[i], "\n")] = '\0';
+        
+        char *lastSpace = strrchr(in[i], ' ');
+        if (lastSpace != NULL) {
+            *lastSpace = '\0';
+            umur[i] = atoi(lastSpace + 1);
+        } else {
+            umur[i] = 0;
+        }
     }
     
     printf("\nOriginal list\n-----------------------------------\n");
     for (int i = 0; i < a; i++) {
-        printf("%-20s %-20s %3d\n", in1[i], in2[i], umur[i]);
+        printf("%-30s %3d\n", in[i], umur[i]);
     }
 
     for (int i = 0; i < a - 1; i++) {
         for (int j = i + 1; j < a; j++) {
-            if (strcmp(in1[i], in1[j]) > 0) {
-                char temp[100];
-                strcpy(temp, in1[i]);
-                strcpy(in1[i], in1[j]);
-                strcpy(in1[j], temp);
-
-                strcpy(temp, in2[i]);
-                strcpy(in2[i], in2[j]);
-                strcpy(in2[j], temp);
+            if (strcmp(in[i], in[j]) > 0) {
+                char temp[1000];
+                strcpy(temp, in[i]);
+                strcpy(in[i], in[j]);
+                strcpy(in[j], temp);
 
                 int temp2 = umur[i];
                 umur[i] = umur[j];
@@ -38,7 +43,7 @@ int main() {
     
     printf("\nAlphabetized list\n-----------------------------------\n"); 
     for (int i = 0; i < a; i++) {
-        printf("%s %-20s %3d\n", in1[i], in2[i], umur[i]);
+        printf("%-30s %3d\n", in[i], umur[i]);
     }
     return 0;
 }
